@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Heart Disease Prediction</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Heart Disease Prediction</h2>
+
+    <form id="predictionForm">
+
+        <label>Age</label>
+        <input type="number" id="age" required>
+
+        <label>Sex</label>
+        <select id="sex">
+            <option value="1">Male</option>
+            <option value="0">Female</option>
+        </select>
+
+        <label>Chest Pain Type</label>
+        <select id="cp">
+            <option value="0">Typical Angina</option>
+            <option value="1">Atypical Angina</option>
+            <option value="2">Non-anginal Pain</option>
+            <option value="3">Asymptomatic</option>
+        </select>
+
+        <label>Resting Blood Pressure</label>
+        <input type="number" id="trestbps" required>
+
+        <label>Cholesterol</label>
+        <input type="number" id="chol" required>
+
+        <label>Fasting Blood Sugar</label>
+        <select id="fbs">
+            <option value="0">≤ 120 mg/dl</option>
+            <option value="1">> 120 mg/dl</option>
+        </select>
+
+        <label>Rest ECG</label>
+        <select id="restecg">
+            <option value="0">Normal</option>
+            <option value="1">ST-T Wave Abnormality</option>
+            <option value="2">Left Ventricular Hypertrophy</option>
+        </select>
+
+        <label>Maximum Heart Rate</label>
+        <input type="number" id="thalach" required>
+
+        <label>Exercise Induced Angina</label>
+        <select id="exang">
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+        </select>
+
+        <label>Oldpeak</label>
+        <input type="number" step="0.1" id="oldpeak" required>
+
+        <label>Slope</label>
+        <select id="slope">
+            <option value="0">Upsloping</option>
+            <option value="1">Flat</option>
+            <option value="2">Downsloping</option>
+        </select>
+
+        <label>Number of Major Vessels (CA)</label>
+        <input type="number" min="0" max="4" id="ca" required>
+
+        <label>Thal</label>
+        <select id="thal">
+            <option value="1">Normal</option>
+            <option value="2">Fixed Defect</option>
+            <option value="3">Reversible Defect</option>
+        </select>
+
+        <button type="submit">Predict</button>
+
+    </form>
+
+    <h3 id="result"></h3>
+
+</div>
+
+<script>
+
+document.getElementById("predictionForm").addEventListener("submit", function(e){
+
+    e.preventDefault();
+
+    const data = {
+
+        age: Number(document.getElementById("age").value),
+        sex: Number(document.getElementById("sex").value),
+        cp: Number(document.getElementById("cp").value),
+        trestbps: Number(document.getElementById("trestbps").value),
+        chol: Number(document.getElementById("chol").value),
+        fbs: Number(document.getElementById("fbs").value),
+        restecg: Number(document.getElementById("restecg").value),
+        thalach: Number(document.getElementById("thalach").value),
+        exang: Number(document.getElementById("exang").value),
+        oldpeak: Number(document.getElementById("oldpeak").value),
+        slope: Number(document.getElementById("slope").value),
+        ca: Number(document.getElementById("ca").value),
+        thal: Number(document.getElementById("thal").value)
+
+    };
+
+    fetch("/predict", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify(data)
+
+    })
+
+    .then(response => response.json())
+
+    .then(result => {
+
+        document.getElementById("result").innerHTML =
+        "Prediction: " + result.prediction;
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>
