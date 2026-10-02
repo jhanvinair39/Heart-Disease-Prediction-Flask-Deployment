@@ -4,627 +4,305 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CardioPredict | Heart Disease Assessment</title>
+    <title>CardioPredict | Heart Disease Prediction</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
-```
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    body {
-        font-family: "Segoe UI", Arial, sans-serif;
-        background: #f2f6f8;
-        color: #253b47;
-        line-height: 1.6;
-    }
-
-    .topbar {
-        background: #103d48;
-        color: white;
-        padding: 18px 7%;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 15px;
-    }
-
-    .brand {
-        font-size: 22px;
-        font-weight: 700;
-        letter-spacing: .3px;
-    }
-
-    .brand span {
-        color: #60d6bc;
-    }
-
-    .topbar small {
-        color: #c5d9dc;
-        font-size: 13px;
-    }
-
-    .hero {
-        background: linear-gradient(120deg, #145361, #197b79);
-        color: white;
-        padding: 42px 7% 48px;
-    }
-
-    .hero-content {
-        max-width: 1100px;
-        margin: auto;
-    }
-
-    .eyebrow {
-        color: #a8e8d9;
-        text-transform: uppercase;
-        font-size: 12px;
-        font-weight: 700;
-        letter-spacing: 1.5px;
-        margin-bottom: 10px;
-    }
-
-    .hero h1 {
-        font-size: clamp(26px, 4vw, 38px);
-        line-height: 1.2;
-        margin-bottom: 12px;
-    }
-
-    .hero p {
-        max-width: 700px;
-        color: #e0f0f0;
-        font-size: 15px;
-    }
-
-    .container {
-        width: min(1100px, 90%);
-        margin: -22px auto 50px;
-        position: relative;
-    }
-
-    .notice {
-        background: #e4f4f0;
-        border: 1px solid #b9e0d5;
-        border-left: 4px solid #23977e;
-        border-radius: 8px;
-        padding: 15px 18px;
-        margin-bottom: 22px;
-        color: #315c55;
-        font-size: 13px;
-    }
-
-    .notice strong {
-        display: block;
-        color: #176c5c;
-        margin-bottom: 3px;
-    }
-
-    .main-grid {
-        display: grid;
-        grid-template-columns: minmax(0, 1.65fr) minmax(260px, .85fr);
-        gap: 22px;
-        align-items: start;
-    }
-
-    .panel {
-        background: white;
-        border: 1px solid #e1e9ec;
-        border-radius: 12px;
-        box-shadow: 0 5px 22px rgba(26, 62, 72, .055);
-        overflow: hidden;
-    }
-
-    .panel-header {
-        padding: 20px 24px;
-        border-bottom: 1px solid #e8eef0;
-    }
-
-    .panel-header h2 {
-        font-size: 19px;
-        color: #173e49;
-    }
-
-    .panel-header p {
-        font-size: 13px;
-        color: #758892;
-        margin-top: 3px;
-    }
-
-    .form-content {
-        padding: 22px 24px 26px;
-    }
-
-    .section-title {
-        font-size: 12px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        color: #18816f;
-        padding-bottom: 10px;
-        margin: 8px 0 17px;
-        border-bottom: 1px solid #e8eeee;
-    }
-
-    .section-title:not(:first-child) {
-        margin-top: 28px;
-    }
-
-    .fields {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 19px 18px;
-    }
-
-    .field {
-        display: flex;
-        flex-direction: column;
-        gap: 7px;
-    }
-
-    .field label {
-        color: #344e59;
-        font-size: 13px;
-        font-weight: 600;
-    }
-
-    input, select {
-        width: 100%;
-        height: 43px;
-        border: 1px solid #d7e1e5;
-        border-radius: 7px;
-        background: #fbfcfd;
-        padding: 0 12px;
-        color: #263f4a;
-        font-size: 14px;
-        outline: none;
-        transition: border .2s, box-shadow .2s;
-    }
-
-    input:focus, select:focus {
-        border-color: #249783;
-        box-shadow: 0 0 0 3px rgba(36, 151, 131, .12);
-        background: white;
-    }
-
-    .field-hint {
-        color: #8999a0;
-        font-size: 11px;
-    }
-
-    .full-width {
-        grid-column: 1 / -1;
-    }
-
-    .submit-btn {
-        width: 100%;
-        border: none;
-        border-radius: 7px;
-        background: #147968;
-        color: white;
-        padding: 14px;
-        margin-top: 28px;
-        font-size: 14px;
-        font-weight: 700;
-        cursor: pointer;
-        transition: background .2s, transform .2s;
-    }
-
-    .submit-btn:hover {
-        background: #105f53;
-        transform: translateY(-1px);
-    }
-
-    .submit-btn:disabled {
-        opacity: .65;
-        cursor: wait;
-        transform: none;
-    }
-
-    .side-column {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    .result-box {
-        padding: 22px;
-        min-height: 170px;
-    }
-
-    .result-label {
-        color: #16806e;
-        font-size: 12px;
-        text-transform: uppercase;
-        font-weight: 700;
-        letter-spacing: 1px;
-    }
-
-    .result-box h3 {
-        font-size: 20px;
-        color: #25434e;
-        margin: 13px 0 8px;
-    }
-
-    .result-box p {
-        font-size: 13px;
-        color: #758790;
-    }
-
-    #result.success {
-        color: #147968;
-    }
-
-    #result.warning {
-        color: #b36b22;
-    }
-
-    #result.error {
-        color: #b33b3b;
-    }
-
-    .advice {
-        padding: 22px;
-    }
-
-    .advice h2 {
-        font-size: 17px;
-        color: #173e49;
-        margin-bottom: 7px;
-    }
-
-    .advice-intro {
-        color: #778992;
-        font-size: 12px;
-        margin-bottom: 17px;
-    }
-
-    .advice-item {
-        display: flex;
-        gap: 11px;
-        margin-bottom: 16px;
-        align-items: flex-start;
-    }
-
-    .advice-icon {
-        width: 29px;
-        height: 29px;
-        min-width: 29px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 7px;
-        background: #e6f4f0;
-        color: #167866;
-        font-size: 14px;
-        font-weight: 700;
-    }
-
-    .advice-item strong {
-        display: block;
-        font-size: 12px;
-        color: #34505a;
-        margin-bottom: 2px;
-    }
-
-    .advice-item p {
-        font-size: 12px;
-        color: #778992;
-        line-height: 1.5;
-    }
-
-    .disclaimer {
-        margin-top: 20px;
-        border-top: 1px solid #e7edef;
-        padding-top: 14px;
-        font-size: 11px;
-        color: #87969c;
-        line-height: 1.6;
-    }
-
-    footer {
-        background: #103d48;
-        color: #c6d9dc;
-        text-align: center;
-        padding: 20px;
-        font-size: 12px;
-    }
-
-    @media (max-width: 800px) {
-        .main-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .side-column {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-    }
-
-    @media (max-width: 550px) {
-        .topbar {
-            padding: 15px 5%;
-        }
-
-        .topbar small {
-            display: none;
-        }
-
-        .hero {
-            padding: 35px 5% 42px;
-        }
-
-        .container {
-            width: 92%;
-        }
-
-        .form-content, .panel-header {
-            padding: 18px;
-        }
-
-        .fields {
-            grid-template-columns: 1fr;
-        }
-
-        .full-width {
-            grid-column: auto;
-        }
-
-        .side-column {
-            display: flex;
-        }
-    }
-</style>
-```
-
 </head>
 
 <body>
 
-```
 <header class="topbar">
     <div class="brand">Cardio<span>Predict</span></div>
-    <small>Machine Learning-Based Health Assessment</small>
+    <div class="top-label">MACHINE LEARNING | HEALTH ANALYTICS</div>
 </header>
 
 <section class="hero">
-    <div class="hero-content">
-        <div class="eyebrow">Clinical Data Analysis</div>
+    <div class="hero-inner">
+        <span class="eyebrow">CLINICAL DATA ANALYSIS</span>
         <h1>Heart Disease Prediction</h1>
         <p>
             An interactive machine learning application that analyzes
-            selected clinical attributes to generate a heart disease
-            classification prediction.
+            clinical attributes to generate a heart disease classification
+            prediction.
+        </p>
+    </div>
+    <div class="hero-decoration">+</div>
+</section>
+
+<main class="page-container">
+
+```
+<section class="intro">
+    <div class="intro-mark">i</div>
+    <div>
+        <strong>About this assessment</strong>
+        <p>
+            Enter the available patient information below to generate
+            a prediction. This application is intended for academic
+            and research demonstration purposes only.
         </p>
     </div>
 </section>
 
-<main class="container">
+<section class="parameters-section">
 
-    <div class="notice">
-        <strong>About this assessment</strong>
-        Enter the available patient information below. All fields are
-        required to generate a prediction. The result is intended for
-        educational and research demonstration purposes only.
+    <div class="section-heading">
+        <div>
+            <span class="eyebrow">MODEL INPUTS</span>
+            <h2>Patient Health Parameters</h2>
+            <p>Clinical and demographic attributes used by the prediction model.</p>
+        </div>
+        <span class="parameter-count">13 PARAMETERS</span>
     </div>
 
-    <div class="main-grid">
+    <div class="parameter-group">
+        <div class="group-heading">
+            <span class="group-number">01</span>
+            <h3>Basic Information</h3>
+            <span class="group-line"></span>
+        </div>
 
-        <section class="panel">
-            <div class="panel-header">
-                <h2>Patient Information</h2>
-                <p>Enter the clinical attributes required by the model.</p>
+        <div class="parameter-grid">
+            <div class="field">
+                <label for="age">Age</label>
+                <input type="number" id="age" min="1" required placeholder="Enter age">
             </div>
 
-            <div class="form-content">
-                <form id="predictionForm">
-
-                    <div class="section-title">01 &nbsp; Basic Information</div>
-
-                    <div class="fields">
-                        <div class="field">
-                            <label for="age">Age</label>
-                            <input type="number" id="age" min="1" required placeholder="Enter age">
-                        </div>
-
-                        <div class="field">
-                            <label for="sex">Sex</label>
-                            <select id="sex">
-                                <option value="1">Male</option>
-                                <option value="0">Female</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="section-title">02 &nbsp; Clinical Measurements</div>
-
-                    <div class="fields">
-                        <div class="field">
-                            <label for="trestbps">Resting Blood Pressure</label>
-                            <input type="number" id="trestbps" required placeholder="e.g. 120">
-                            <span class="field-hint">mm Hg</span>
-                        </div>
-
-                        <div class="field">
-                            <label for="chol">Serum Cholesterol</label>
-                            <input type="number" id="chol" required placeholder="e.g. 200">
-                            <span class="field-hint">mg/dl</span>
-                        </div>
-
-                        <div class="field">
-                            <label for="fbs">Fasting Blood Sugar</label>
-                            <select id="fbs">
-                                <option value="0">≤ 120 mg/dl</option>
-                                <option value="1">&gt; 120 mg/dl</option>
-                            </select>
-                        </div>
-
-                        <div class="field">
-                            <label for="restecg">Resting ECG</label>
-                            <select id="restecg">
-                                <option value="0">Normal</option>
-                                <option value="1">ST-T Wave Abnormality</option>
-                                <option value="2">Left Ventricular Hypertrophy</option>
-                            </select>
-                        </div>
-
-                        <div class="field">
-                            <label for="thalach">Maximum Heart Rate</label>
-                            <input type="number" id="thalach" required placeholder="e.g. 150">
-                            <span class="field-hint">Beats per minute</span>
-                        </div>
-
-                        <div class="field">
-                            <label for="oldpeak">Oldpeak</label>
-                            <input type="number" step="0.1" id="oldpeak" required placeholder="e.g. 1.0">
-                            <span class="field-hint">ST depression value</span>
-                        </div>
-                    </div>
-
-                    <div class="section-title">03 &nbsp; Cardiac Indicators</div>
-
-                    <div class="fields">
-                        <div class="field">
-                            <label for="cp">Chest Pain Type</label>
-                            <select id="cp">
-                                <option value="0">Typical Angina</option>
-                                <option value="1">Atypical Angina</option>
-                                <option value="2">Non-anginal Pain</option>
-                                <option value="3">Asymptomatic</option>
-                            </select>
-                        </div>
-
-                        <div class="field">
-                            <label for="exang">Exercise-Induced Angina</label>
-                            <select id="exang">
-                                <option value="0">No</option>
-                                <option value="1">Yes</option>
-                            </select>
-                        </div>
-
-                        <div class="field">
-                            <label for="slope">ST Segment Slope</label>
-                            <select id="slope">
-                                <option value="0">Upsloping</option>
-                                <option value="1">Flat</option>
-                                <option value="2">Downsloping</option>
-                            </select>
-                        </div>
-
-                        <div class="field">
-                            <label for="ca">Major Vessels (CA)</label>
-                            <input type="number" min="0" max="4" id="ca" required placeholder="0–4">
-                        </div>
-
-                        <div class="field full-width">
-                            <label for="thal">Thalassemia Category (Thal)</label>
-                            <select id="thal">
-                                <option value="1">Normal</option>
-                                <option value="2">Fixed Defect</option>
-                                <option value="3">Reversible Defect</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="submit-btn" id="submitBtn">
-                        Generate Prediction
-                    </button>
-
-                </form>
+            <div class="field">
+                <label for="sex">Sex</label>
+                <select id="sex">
+                    <option value="1">Male</option>
+                    <option value="0">Female</option>
+                </select>
             </div>
-        </section>
-
-        <aside class="side-column">
-
-            <section class="panel">
-                <div class="result-box">
-                    <div class="result-label">Assessment Result</div>
-                    <h3 id="result">Awaiting Input</h3>
-                    <p id="resultDescription">
-                        Complete the patient information form and generate
-                        a prediction to view the result here.
-                    </p>
-                </div>
-            </section>
-
-            <section class="panel">
-                <div class="advice">
-                    <h2>Health Information</h2>
-                    <p class="advice-intro">
-                        General information related to cardiovascular health
-                    </p>
-
-                    <div class="advice-item">
-                        <div class="advice-icon">01</div>
-                        <div>
-                            <strong>Regular Health Checkups</strong>
-                            <p>
-                                Monitor blood pressure, cholesterol and
-                                other relevant health indicators with
-                                qualified healthcare professionals.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="advice-item">
-                        <div class="advice-icon">02</div>
-                        <div>
-                            <strong>Balanced Nutrition</strong>
-                            <p>
-                                Maintain a balanced diet with vegetables,
-                                fruits, whole grains and appropriate
-                                dietary choices.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="advice-item">
-                        <div class="advice-icon">03</div>
-                        <div>
-                            <strong>Physical Activity</strong>
-                            <p>
-                                Engage in regular physical activity suited
-                                to your individual health and fitness level.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="advice-item">
-                        <div class="advice-icon">04</div>
-                        <div>
-                            <strong>Professional Guidance</strong>
-                            <p>
-                                Consult a qualified healthcare professional
-                                for concerns about cardiovascular symptoms
-                                or risk factors.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="disclaimer">
-                        <strong>Important disclaimer</strong><br>
-                        This application is an academic machine learning
-                        demonstration. Its predictions are not a medical
-                        diagnosis, a clinical risk assessment, or a
-                        substitute for professional medical advice.
-                    </div>
-                </div>
-            </section>
-
-        </aside>
+        </div>
     </div>
+
+    <div class="parameter-group">
+        <div class="group-heading">
+            <span class="group-number">02</span>
+            <h3>Clinical Measurements</h3>
+            <span class="group-line"></span>
+        </div>
+
+        <div class="parameter-grid">
+            <div class="field">
+                <label for="trestbps">Resting Blood Pressure</label>
+                <div class="input-unit">
+                    <input type="number" id="trestbps" required placeholder="e.g. 120">
+                    <span>mm Hg</span>
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="chol">Serum Cholesterol</label>
+                <div class="input-unit">
+                    <input type="number" id="chol" required placeholder="e.g. 200">
+                    <span>mg/dl</span>
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="fbs">Fasting Blood Sugar</label>
+                <select id="fbs">
+                    <option value="0">≤ 120 mg/dl</option>
+                    <option value="1">&gt; 120 mg/dl</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="restecg">Resting ECG</label>
+                <select id="restecg">
+                    <option value="0">Normal</option>
+                    <option value="1">ST-T Wave Abnormality</option>
+                    <option value="2">Left Ventricular Hypertrophy</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="thalach">Maximum Heart Rate</label>
+                <div class="input-unit">
+                    <input type="number" id="thalach" required placeholder="e.g. 150">
+                    <span>BPM</span>
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="oldpeak">Oldpeak</label>
+                <input type="number" step="0.1" id="oldpeak" required placeholder="e.g. 1.0">
+            </div>
+        </div>
+    </div>
+
+    <div class="parameter-group">
+        <div class="group-heading">
+            <span class="group-number">03</span>
+            <h3>Cardiac Indicators</h3>
+            <span class="group-line"></span>
+        </div>
+
+        <div class="parameter-grid">
+            <div class="field">
+                <label for="cp">Chest Pain Type</label>
+                <select id="cp">
+                    <option value="0">Typical Angina</option>
+                    <option value="1">Atypical Angina</option>
+                    <option value="2">Non-anginal Pain</option>
+                    <option value="3">Asymptomatic</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="exang">Exercise-Induced Angina</label>
+                <select id="exang">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="slope">ST Segment Slope</label>
+                <select id="slope">
+                    <option value="0">Upsloping</option>
+                    <option value="1">Flat</option>
+                    <option value="2">Downsloping</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="ca">Major Vessels (CA)</label>
+                <input type="number" min="0" max="4" id="ca" required placeholder="0–4">
+            </div>
+
+            <div class="field">
+                <label for="thal">Thalassemia Category (Thal)</label>
+                <select id="thal">
+                    <option value="1">Normal</option>
+                    <option value="2">Fixed Defect</option>
+                    <option value="3">Reversible Defect</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="action-row">
+        <p>Ensure all clinical values are entered before generating a prediction.</p>
+        <button type="button" id="predictBtn">
+            Generate Prediction <span>→</span>
+        </button>
+    </div>
+
+</section>
+
+<section class="results-section">
+    <div class="results-header">
+        <div>
+            <span class="eyebrow">MODEL OUTPUT</span>
+            <h2>Prediction Results</h2>
+        </div>
+        <span class="live-indicator"><span></span> READY</span>
+    </div>
+
+    <div class="result-content">
+        <div class="result-symbol" id="resultSymbol">—</div>
+        <div class="result-text">
+            <span class="result-label">ASSESSMENT RESULT</span>
+            <h3 id="result">Awaiting Input</h3>
+            <p id="resultDescription">
+                Submit the patient parameters to display the model's prediction.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="advice-section">
+    <div class="advice-heading">
+        <span class="eyebrow">HEALTH INFORMATION</span>
+        <h2>Cardiovascular Health</h2>
+        <p>General information on maintaining cardiovascular health.</p>
+    </div>
+
+    <div class="advice-grid">
+        <article class="advice-item">
+            <span class="advice-number">01</span>
+            <div>
+                <h3>Regular Health Checkups</h3>
+                <p>
+                    Monitor blood pressure, cholesterol and other
+                    relevant health indicators with qualified
+                    healthcare professionals.
+                </p>
+            </div>
+        </article>
+
+        <article class="advice-item">
+            <span class="advice-number">02</span>
+            <div>
+                <h3>Balanced Nutrition</h3>
+                <p>
+                    Maintain a balanced diet with vegetables,
+                    fruits, whole grains and appropriate
+                    dietary choices.
+                </p>
+            </div>
+        </article>
+
+        <article class="advice-item">
+            <span class="advice-number">03</span>
+            <div>
+                <h3>Physical Activity</h3>
+                <p>
+                    Engage in regular physical activity
+                    suited to individual health and
+                    fitness levels.
+                </p>
+            </div>
+        </article>
+
+        <article class="advice-item">
+            <span class="advice-number">04</span>
+            <div>
+                <h3>Professional Guidance</h3>
+                <p>
+                    Consult a qualified healthcare professional
+                    for concerns about cardiovascular symptoms
+                    or risk factors.
+                </p>
+            </div>
+        </article>
+    </div>
+
+    <div class="disclaimer">
+        <strong>Disclaimer</strong>
+        This project is an academic machine learning demonstration.
+        Its predictions are not a medical diagnosis or a substitute
+        for professional medical advice.
+    </div>
+</section>
+```
+
 </main>
 
 <footer>
-    Heart Disease Prediction System &nbsp;|&nbsp;
-    Machine Learning Project
+    <div class="footer-brand">Cardio<span>Predict</span></div>
+    <p>Heart Disease Prediction System | Machine Learning Project</p>
 </footer>
 
 <script>
-    document.getElementById("predictionForm").addEventListener("submit", async function(e) {
-        e.preventDefault();
+    const predictBtn = document.getElementById("predictBtn");
+
+    predictBtn.addEventListener("click", async function () {
+        const formFields = [
+            "age", "trestbps", "chol", "thalach", "oldpeak", "ca"
+        ];
+
+        for (const id of formFields) {
+            const field = document.getElementById(id);
+            if (!field.value || !field.checkValidity()) {
+                field.focus();
+                field.reportValidity();
+                return;
+            }
+        }
 
         const data = {
             age: Number(document.getElementById("age").value),
@@ -644,13 +322,14 @@
 
         const result = document.getElementById("result");
         const description = document.getElementById("resultDescription");
-        const button = document.getElementById("submitBtn");
+        const symbol = document.getElementById("resultSymbol");
 
-        result.className = "";
         result.textContent = "Processing...";
-        description.textContent = "The model is analyzing the submitted information.";
-        button.disabled = true;
-        button.textContent = "Generating Prediction...";
+        description.textContent = "Analyzing submitted parameters.";
+        symbol.textContent = "···";
+        symbol.className = "result-symbol loading";
+        predictBtn.disabled = true;
+        predictBtn.textContent = "Processing...";
 
         try {
             const response = await fetch("/predict", {
@@ -664,28 +343,29 @@
             const output = await response.json();
 
             if (!response.ok || output.error) {
-                throw new Error(output.error || "Unable to generate prediction.");
+                throw new Error(output.error || "Prediction failed.");
             }
 
             result.textContent = output.prediction;
-            result.className = output.prediction === "Heart Disease Detected"
-                ? "warning"
-                : "success";
+            symbol.textContent = output.prediction === "Heart Disease Detected" ? "!" : "✓";
+            symbol.className = output.prediction === "Heart Disease Detected"
+                ? "result-symbol warning"
+                : "result-symbol success";
 
             description.textContent =
                 "Prediction generated successfully. This result is for demonstration purposes only.";
 
         } catch (error) {
             result.textContent = "Prediction Unavailable";
-            result.className = "error";
             description.textContent = error.message;
+            symbol.textContent = "×";
+            symbol.className = "result-symbol error";
         } finally {
-            button.disabled = false;
-            button.textContent = "Generate Prediction";
+            predictBtn.disabled = false;
+            predictBtn.innerHTML = 'Generate Prediction <span>→</span>';
         }
     });
 </script>
-```
 
 </body>
 </html>
